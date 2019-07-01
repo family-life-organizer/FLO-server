@@ -8,7 +8,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 const app = express();
 const debugg = debug('app');
-const port = process.env.PORT;
+const port = process.env.PORT || 6000;
 
 
 app.use(morgan('tiny'));
