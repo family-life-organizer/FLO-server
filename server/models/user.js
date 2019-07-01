@@ -17,10 +17,10 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   User.associate = models => {
-    // User.belongsTo(models.Family, {
-    //   foreignKey: "userId",
-    //   as: "family"
-    // });
+    User.belongsTo(models.Family, {
+      foreignKey: "id",
+      as: "family"
+    });
   };
   return User;
 };

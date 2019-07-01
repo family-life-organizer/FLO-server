@@ -1,8 +1,8 @@
 import express from "express";
-import models from "../models";
-const router = express.Router();
+import Users from "../controllers/user";
 
-const { User } = models;
+const { registerUser } = Users;
+const router = express.Router();
 
 router.get("/", (req, res) =>
   res.status(200).send({
@@ -10,11 +10,6 @@ router.get("/", (req, res) =>
   })
 );
 
-router.get("/signup", (req, res) => {
-  User.findOne({ where: { email: "ezekiel" } })
-    .then(res => console.log(res))
-    .catch(err => console.log(err));
-  return res.json("great");
-});
+router.get("/signup", registerUser);
 
 export default router;
