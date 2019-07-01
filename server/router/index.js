@@ -8,4 +8,9 @@ router.get('/', (req, res) => res.status(200).send({
 }));
 
 
+router.get('/signup', (req, res) => {
+  
+});
+
+
 export default router;

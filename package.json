@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "migrate":"sequelize db:migrate",
+    "migrate": "sequelize db:migrate",
     "start:dev": "DEBUG=* nodemon --exec babel-node ./server/app.js"
   },
   "repository": {

@@ -1,7 +1,14 @@
 import fs from "fs";
 import path from "path";
 import Sequelize from "sequelize";
+<<<<<<< HEAD
+import envConfigs from "../config/config.js";
+import dotenv from "dotenv";
+
+dotenv.config();
+=======
 import envConfigs from "../config/config.json";
+>>>>>>> d020664ae8cdc78d7ed2220dd376b0f328e2d200
 
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || "development";
