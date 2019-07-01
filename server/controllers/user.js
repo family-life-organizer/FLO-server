@@ -3,7 +3,7 @@ import Helpers from "../helpers";
 import models from "../models";
 
 const { User, Family } = models;
-const { generateHash } = Helpers;
+const { generateHash, generateToken } = Helpers;
 class Users {
   static async registerUser(req, res) {
     const {
@@ -17,21 +17,21 @@ class Users {
     try {
       const existingFamily = await User.findOne({ where: { lastName } });
 
-      if (existingFamily) {
-        return res.status(409).json({
-          status: "error",
-          message: "Family already existing, Kindly choose another family name"
-        });
-      }
+        if (existingFamily) {
+          return res.status(409).json({
+            status: "error",
+            message: "Family already existing, Kindly choose another family name"
+          });
+        }
 
-      const existingUsername = await User.findOne({ where: { username } });
+        const existingUsername = await User.findOne({ where: { username } });
 
-      if (existingUsername) {
-        return res.status(409).json({
-          status: "error",
-          message: "Username already existing, Kindly choose another username"
-        });
-      }
+        if (existingUsername) {
+          return res.status(409).json({
+            status: "error",
+            message: "Username already existing, Kindly choose another username"
+          });
+        }
 
       const hashedPassword = await generateHash(password);
 
@@ -61,10 +61,14 @@ class Users {
             updatedAt: newUser.updatedAt
           };
 
+          const { id } = newUser;
+          const token = await generateToken({ id }, process.env.SECRET_OR_KEY);
+
           return res.status(201).json({
             status: "success",
             message: "Family Created",
-            data: response
+            data: response,
+            token
           });
         }
       }
