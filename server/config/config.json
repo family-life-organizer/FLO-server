@@ -1,11 +1,6 @@
 {
   "development": {
-    "username": "nedsoft",
-    "password": null,
-    "database": "family_organize",
-    "host": "127.0.0.1",
-    "port": 5432,
-    "dialect": "postgres"
+    "use_env_variable":"DATABASE_URL"
   },
   "test": {
     "username": "root",
@@ -15,11 +10,6 @@
     "dialect": "mysql"
   },
   "production": {
-    "use_env_variable":"DATABASE_URL",
-    "username": "root",
-    "password": null,
-    "database": "",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "use_env_variable":"DATABASE_URL"
   }
 }
