@@ -5,7 +5,9 @@
   "main": "app.js",
   "scripts": {
     "migrate": "sequelize db:migrate",
-    "start:dev": "nodemon --exec babel-node ./server/app.js"
+    "migrate:reset": "sequelize db:migrate:undo && npm run migrate",
+    "start:dev": "DEBUG=* nodemon --exec babel-node ./server/app.js",
+    "start": "babel-node ./server/app.js"
   },
   "repository": {
     "type": "git",
@@ -25,6 +27,7 @@
     "body-parser": "^1.19.0",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "pg": "^7.11.0",
     "pg-hstore": "^2.3.3",
     "sequelize": "^5.9.0",

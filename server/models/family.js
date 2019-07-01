@@ -8,11 +8,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {});
   Family.associate = (models) => {
-    // associations can be defined here
-    // Family.hasMany(models.User, {
-    //   foreignKey: 'userId',
-    //   as: 'users',
-    // });
+    Family.hasMany(models.User, {
+      foreignKey: 'familyId',
+      as: 'users',
+    });
   };
   return Family;
 };
