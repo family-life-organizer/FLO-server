@@ -10,11 +10,4 @@ router.get("/", (req, res) =>
   })
 );
 
-// router.get("/signup", (req, res) => {
-//   User.findOne({ where: { email: "ezekiel" } })
-//     .then(res => console.log(res))
-//     .catch(err => console.log(err));
-//   return res.json("great");
-// });
-
 export default router;
