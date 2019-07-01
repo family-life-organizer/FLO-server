@@ -3,9 +3,13 @@ import bodyParser from 'body-parser';
 import debug from 'debug';
 import morgan from 'morgan';
 import router from './router';
+import dotenv from 'dotenv'
+
+dotenv.config()
 const app = express();
 const debugg = debug('app');
-const port = process.env.PORT || 6000;
+const port = process.env.PORT;
+
 
 app.use(morgan('tiny'));
 app.use(bodyParser.json());
