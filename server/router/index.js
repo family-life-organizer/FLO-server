@@ -3,7 +3,8 @@ import Users from "../controllers/user";
 import middleware from '../middlewares/authentication'
 import Category from '../controllers/category'
 import Task from '../controllers/task'
-const { addTask } = Task;
+
+const { addTask, completeTask } = Task;
 const { isAuthenticated, isAdmin } = middleware;
 const { createCategory, getFamilyCategories }  = Category
 const { registerUser, loginUser, addUser, updateProfile, getFamilyMembers, getUserDetails } = Users;
@@ -28,4 +29,6 @@ router.get('/categories/family', isAdmin, getFamilyCategories )
 router.get('/users/family', isAdmin, getFamilyMembers )
 router.get('/users/:userId', isAuthenticated, getUserDetails)
 router.post('/tasks', isAdmin, addTask)
+router.patch('/tasks/:taskId', isAuthenticated,completeTask)
+
 export default router;
