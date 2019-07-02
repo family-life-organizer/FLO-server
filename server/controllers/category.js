@@ -1,6 +1,8 @@
 import model from "../models";
 import UserController from "../controllers/user";
+import familyController from '../controllers/family'
 
+const { getFamily } = familyController
 const { findUserById } = UserController;
 const { Category, User, Family } = model;
 
@@ -29,7 +31,7 @@ class CategoryController {
         .json({ status: "error", message: "Internal server error", error });
     }
   }
-  
+
 }
 
 export default CategoryController;
