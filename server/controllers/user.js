@@ -130,12 +130,12 @@ class Users {
   }
 
   static async addUser(req, res) {
-    // const { errors, isValid } = UserValidations.validateAddUserInput(req.body);
+    const { errors, isValid } = UserValidations.validateAddUserInput(req.body);
 
-    // // // Check validation
-    // if (!isValid) {
-    //   return res.status(400).json({ status: "error", data: errors });
-    // }
+    // // Check validation
+    if (!isValid) {
+      return res.status(400).json({ status: "error", data: errors });
+    }
 
     const { username, password } = req.body;
     try {
@@ -148,11 +148,14 @@ class Users {
         });
       }
 
+      console.log()
+
       const hashedPassword = await generateHash(password);
 
-      const newUser = await family.createUser({
+      const newUser = await User.create({
         username,
-        password: hashedPassword
+        password: hashedPassword,
+        familyId: req.body.userId,
       });
 
       if (newUser) {
