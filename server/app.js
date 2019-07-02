@@ -9,7 +9,7 @@ import cors from "cors";
 dotenv.config();
 const app = express();
 const debugg = debug( 'app' );
-const port = process.env.PORT || 6000;
+const port = process.env.PORT || 7000;
 
 app.use(cors());
 app.options('*', cors());
