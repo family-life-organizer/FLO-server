@@ -14,10 +14,24 @@
 <h3>Register Route </h3>
 <code>
 Method: POST
+Route: /api/signup
 Payload: {
-    lastname: STRING,
+    firstName: STRING,
+    lastName: STRING,
     email: STRING,
     username: STRING,
+    password: STRING
+}
+</code>
+</pre>
+
+<pre>
+<h3>Login Route </h3>
+<code>
+Method: POST
+Route: /api/login
+Payload: {
+    email: STRING || username: STRING,
     password: STRING
 }
 </code>
