@@ -13,7 +13,6 @@ class Helper {
     const token = jwt.sign(payload, SECRET_OR_KEY, { expiresIn: 3600 });
 
     return `Bearer ${token}`;
-    console.log(me, "===");
   }
 }
 

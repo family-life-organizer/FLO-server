@@ -10,6 +10,20 @@
 - npm migrate or yarn migrate
 - npm run start:dev or yarn start:dev
 
+<pre>
+<h3>Register Route </h3>
+<code>
+Method: POST
+Payload: {
+    lastname: STRING,
+    email: STRING,
+    username: STRING,
+    password: STRING
+}
+</code>
+</pre>
+
+
 - Start coding
 - Keep coding
 - Win the Hackerthon🔥🔥

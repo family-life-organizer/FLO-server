@@ -45,7 +45,7 @@ class Users {
           lastName,
           email,
           username,
-          isAdmin,
+          isAdmin: true,
           password: hashedPassword
         });
 
