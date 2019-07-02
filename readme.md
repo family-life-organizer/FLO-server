@@ -37,6 +37,20 @@ Payload: {
 </code>
 </pre>
 
+pre>
+<h3>Create Category </h3>
+<code>
+Method: POST
+Route: /api/categories
+headers : {
+  authorization: token
+}
+Payload: {
+    name: STRING 
+}
+</code>
+</pre>
+
 
 - Start coding
 - Keep coding
