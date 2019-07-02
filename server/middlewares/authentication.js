@@ -20,6 +20,25 @@ class Authentication {
     req.body.userId = id;
     next();
   }
+  static async isAdmin(req, res, next) {
+    const { authorization: token } = req.headers || null;
+    if (!token) {
+      return res.status(403).json({
+        status: "error",
+        message: "Unauthorized Request"
+      });
+    }
+    const { id } = await decodeToken(token) || {id: null};
+    if (!id) {
+      return res.status(403).json({
+        status: "error",
+        message: "Unauthorized Request"
+      });
+    }
+    
+    next();
+  }
+
 }
 
 export default Authentication;

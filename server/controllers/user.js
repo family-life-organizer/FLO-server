@@ -177,6 +177,22 @@ class Users {
         .json({ status: "error", message: "Error creating user" });
     }
   }
+  static async findUserById(userId) {
+    try {
+      const user = await User.findByPk(userId, {
+        include: [
+          {
+            model: Family,
+            as: 'family'
+          }
+        ]
+      });
+      if (user) return user;
+       return null
+    } catch (error) {
+      return null
+    }
+  }
 }
 
 export default Users;
