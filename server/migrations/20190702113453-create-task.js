@@ -16,7 +16,7 @@ module.exports = {
       },
       assigneeId: {
         type: Sequelize.INTEGER,
-        allowNull: true,
+        allowNull: true
       },
       categoryId: {
         type: Sequelize.INTEGER,
@@ -26,7 +26,25 @@ module.exports = {
           as: 'categoryId',
           key: 'id'
         }
-      }
+      },
+      familyId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Families',
+          as: 'familyId',
+          key: 'id'
+        }
+      },
+      assigneeId: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'Users',
+          as: 'assigneeId',
+          key: 'id'
+        }
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
