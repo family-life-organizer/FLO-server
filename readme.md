@@ -108,7 +108,41 @@ Payload: {
 </code>
 </pre>
 
+<pre>
+<h3>Get Family Task Categories </h3>
+<code>
+Method: GET
+Route: /api/categories/family
+headers : {
+  authorization: token
+}
+</code>
+</pre>
+
+<pre>
+<h3>Get Family Members </h3>
+<code>
+Method: GET
+Route: /api/users/family
+headers : {
+  authorization: token
+}
+</code>
+</pre>
+
+<pre>
+<h3>Get Single User Details</h3>
+<code>
+Method: GET
+Route: /api/users/`userId`
+headers : {
+  authorization: token
+}
+</code>
+</pre>
+
 
 - Start coding
 - Keep coding
 - Win the Hackerthon🔥🔥
+

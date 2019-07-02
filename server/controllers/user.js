@@ -6,7 +6,7 @@ import UserValidations from "../validations/user";
 import FamilyController from "./family";
 
 const { getFamily } = FamilyController;
-const { User, Family } = models;
+const { User, Family, Task } = models;
 const { generateHash, generateToken } = Helpers;
 class Users {
   static async registerUser(req, res) {
@@ -19,14 +19,14 @@ class Users {
 
     const { lastName, firstName, email, username, password } = req.body;
     try {
-      const existingFamily = await User.findOne({ where: { lastName } });
+      // const existingFamily = await User.findOne({ where: { lastName } });
 
-      if (existingFamily) {
-        return res.status(409).json({
-          status: "error",
-          message: "Family already existing, Kindly choose another family name"
-        });
-      }
+      // if (existingFamily) {
+      //   return res.status(409).json({
+      //     status: "error",
+      //     message: "Family already existing, Kindly choose another family name"
+      //   });
+      // }
 
       const existingUsername = await User.findOne({ where: { username } });
 
@@ -41,7 +41,7 @@ class Users {
 
       const family = await Family.create({
         name: lastName,
-        code: "cheei"
+        code: "azxbkjahskh"
       });
       if (family) {
         const newUser = await family.createUser({
@@ -99,7 +99,6 @@ class Users {
           [Op.or]: [{ username }, { email }]
         }
       });
-      console.log(existingUser);
       if (!existingUser) {
         return res.status(404).json({
           status: "error",
@@ -118,13 +117,14 @@ class Users {
         });
       }
       const { id, familyId } = existingUser;
-      
+      const { firstName, lastName, isAdmin } = existingUser
+
       const family = await getFamily({ id: familyId });
       const token = await generateToken({ id }, process.env.SECRET_OR_KEY);
 
       return res.status(200).json({
         status: "success",
-        user: existingUser,
+        user: { firstName, lastName, isAdmin, username},
         family,
         token,
         message: "Login Successfull"
@@ -148,7 +148,6 @@ class Users {
     const { username, password } = req.body;
     try {
       const existingUsername = await User.findOne({ where: { username } });
-
       if (existingUsername) {
         return res.status(409).json({
           status: "error",
@@ -286,6 +285,71 @@ class Users {
       return null;
     } catch (error) {
       return null;
+    }
+  }
+
+  static async getFamilyMembers(req, res) {
+    try {
+      const { userId } = req.body
+      const user = await User.findByPk(userId);
+      const familyMembers = await User.findAll({
+        where: {
+          familyId: user.familyId
+        },
+        attributes: ['id', 'firstName', 'lastName', 'isAdmin']
+      });
+      if(familyMembers) {
+        return res.status(200).json({
+          status: 'success',
+          message: 'success',
+          data: familyMembers
+        })
+        return res.status(404).json({
+          status: 'error',
+          message: 'No member found for the family',
+        })
+      }
+    } catch (error) {
+      return res.status(500).json({
+        status: 'error',
+        message: 'Internal server error',
+      })
+    }
+    
+  }
+
+  static async getUserDetails(req, res) {
+    const { userId } = req.params;
+    try {
+      const user = await User.findByPk(userId, {
+        attributes: ['id', 'firstName', 'lastName', 'email', 'username', 'isAdmin'],
+        include:[
+          {
+            model: Family,
+            as: 'family'
+          },
+          {
+            model: Task,
+            as: 'tasks'
+          },
+        ]
+      });
+      if(user) {
+        return res.status(200).json({
+          status: 'success',
+          message: 'success',
+          data: user
+        })
+      }
+      return res.status(404).json({
+        status: 'error',
+        message: 'User Not found',
+      })
+    } catch (error) {
+      return res.status(500).json({
+        status: 'error',
+        message: 'Internal server error',
+      })
     }
   }
 }

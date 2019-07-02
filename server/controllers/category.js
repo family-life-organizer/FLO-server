@@ -47,6 +47,35 @@ class CategoryController {
         .json({ status: "error", message: "Internal server error", error });
     }
   }
+
+  static async getFamilyCategories(req, res) {
+    const { userId } = req.body
+    try {
+      const user = await findUserById(userId);
+      const categories = await Category.findAll({
+        where: {
+          familyId: user.familyId
+        }
+      });
+      if (categories) {
+        return res.status(200).json({
+          status: 'success',
+          message: 'success',
+          categories
+        })
+      }
+      return res.status(400).json({
+        status: 'error',
+        message: 'No categories found for the family',
+      })
+    } catch (error) {
+      return res.status(500).json({
+        status: 'error',
+        message: 'Internal server error',
+        error,
+      })
+    }
+  }
 }
 
 export default CategoryController;
