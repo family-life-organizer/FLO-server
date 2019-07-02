@@ -180,6 +180,12 @@ class Users {
 
   static async updateProfile(req, res) {
     let { userId, username, password, lastName, firstName, email } = req.body;
+    if (!username && !password && !lastName && !firstName && !email) {
+        return res.status(400).json({
+            status: "error",
+            message: "At least one field must be provided for update to happen"
+          });
+    }
     try {
       const existingUser = await User.findOne({ where: { id: userId } });
 
@@ -252,11 +258,27 @@ class Users {
         .status(400)
         .json({ status: "error", message: "Error updating user" });
     } catch (err) {
-      console.log(err);
 
       return res
         .status(500)
         .json({ status: "error", message: "Error updating user" });
+    }
+  }
+
+  static async findUserById(userId) {
+    try {
+      const user = await User.findByPk(userId, {
+        include: [
+          {
+            model: Family,
+            as: "family"
+          }
+        ]
+      });
+      if (user) return user;
+      return null;
+    } catch (error) {
+      return null;
     }
   }
 }
