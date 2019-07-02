@@ -1,6 +1,6 @@
 import models from "../models";
 import UserController from '../controllers/user'
-const { Task } = models;
+const { Task, User } = models;
 
 export default class TaskController {
   static async addTask(req, res) {
@@ -32,12 +32,29 @@ export default class TaskController {
         message: "All fields are required"
       });
     } catch (error) {
-      console.log("erorrrooro", error);
       return res.status(500).json({
         status: "error",
         message: "Internal server error",
         error
       });
+    }
+  }
+  static async completeTask(req, res) {
+    try {
+      const { userId } = req.body;
+      const user = await User.findByPk(userId);
+      const { taskId } = req.params
+      const task  = await Task.findByPk(taskId);
+      if (!task) {
+        return res.status(400).json({ status: 'error', message: 'Task Not Found'});
+      }
+      if (task.assigneeId === userId || user.isAdmin) {
+        const updated = await task.update({ status: 'completed'});
+        return res.status(200).json({status: 'success', message: 'Task updated'});
+      }
+      return res.status(403).json({ status: 'error', message: 'No permitted'});
+    } catch (error) {
+      return res.status(500).json({ status: 'error', message: 'Internal server error', error});
     }
   }
 }
