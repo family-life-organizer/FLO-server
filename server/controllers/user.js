@@ -19,14 +19,14 @@ class Users {
 
     const { lastName, firstName, email, username, password } = req.body;
     try {
-      const existingFamily = await User.findOne({ where: { lastName } });
+      // const existingFamily = await User.findOne({ where: { lastName } });
 
-      if (existingFamily) {
-        return res.status(409).json({
-          status: "error",
-          message: "Family already existing, Kindly choose another family name"
-        });
-      }
+      // if (existingFamily) {
+      //   return res.status(409).json({
+      //     status: "error",
+      //     message: "Family already existing, Kindly choose another family name"
+      //   });
+      // }
 
       const existingUsername = await User.findOne({ where: { username } });
 
@@ -41,7 +41,7 @@ class Users {
 
       const family = await Family.create({
         name: lastName,
-        code: "cheei"
+        code: "azxbkjahskh"
       });
       if (family) {
         const newUser = await family.createUser({
@@ -148,7 +148,6 @@ class Users {
     const { username, password } = req.body;
     try {
       const existingUsername = await User.findOne({ where: { username } });
-
       if (existingUsername) {
         return res.status(409).json({
           status: "error",
