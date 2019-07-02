@@ -5,7 +5,7 @@ import Category from '../controllers/category'
 
 const { isAuthenticated, isAdmin } = middleware;
 const { createCategory }  = Category
-const { registerUser, loginUser, addUser } = Users;
+const { registerUser, loginUser, addUser, updateProfile } = Users;
 const router = express.Router();
 
 router.get("/", (req, res) =>
@@ -19,6 +19,8 @@ router.post("/signup", registerUser);
 router.post("/login", loginUser);
 
 router.post("/addUser", isAdmin, addUser);
+
+router.patch("/profile", isAuthenticated, updateProfile);
 
 router.post('/categories', isAdmin, createCategory )
 export default router;

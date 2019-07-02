@@ -122,10 +122,9 @@ class Users {
         .status(200)
         .json({ status: "success", token, message: "Login Successfull" });
     } catch (err) {
-      console.log(err);
       return res
         .status(500)
-        .json({ status: "error", message: "Error creating user", err: err });
+        .json({ status: "error", message: "Error creating user" });
     }
   }
 
@@ -153,7 +152,7 @@ class Users {
       const newUser = await User.create({
         username,
         password: hashedPassword,
-        familyId: req.body.userId,
+        familyId: req.body.userId
       });
 
       if (newUser) {
@@ -177,20 +176,107 @@ class Users {
         .json({ status: "error", message: "Error creating user" });
     }
   }
+
+  static async updateProfile(req, res) {
+    let { userId, username, password, lastName, firstName, email } = req.body;
+    if (!username && !password && !lastName && !firstName && !email) {
+      return res.status(400).json({
+        status: "error",
+        message: "At least one field must be provided for update to happen"
+      });
+    }
+    try {
+      const existingUser = await User.findOne({ where: { id: userId } });
+
+      if (!existingUser) {
+        return res.status(404).json({
+          status: "error",
+          message: "User not found"
+        });
+      }
+
+      username = username || existingUser.username;
+      password = password || existingUser.password;
+      email = email || existingUser.email;
+      firstName = firstName || existingUser.firstName;
+      lastName = lastName || existingUser.lastName;
+
+      const existingUsername = await User.findOne({
+        where: {
+          username,
+          id: {
+            [Op.not]: existingUser.id
+          }
+        }
+      });
+
+      if (existingUsername) {
+        return res.status(409).json({
+          status: "error",
+          message: "Username already existing, Kindly choose another username"
+        });
+      }
+
+      const existingEmail = await User.findOne({
+        where: {
+          email,
+          id: {
+            [Op.not]: existingUser.id
+          }
+        }
+      });
+
+      if (existingEmail) {
+        return res.status(409).json({
+          status: "error",
+          message: "Email already existing, Kindly choose another username"
+        });
+      }
+
+      const hashedPassword = await generateHash(password);
+
+      const updatedUser = await User.update(
+        {
+          username,
+          password: hashedPassword,
+          lastName,
+          firstName,
+          email
+        },
+        { where: { id: userId } }
+      );
+
+      if (updatedUser) {
+        return res.status(200).json({
+          status: "success",
+          message: "User Updated Sucessfully"
+        });
+      }
+
+      return res
+        .status(400)
+        .json({ status: "error", message: "Error updating user" });
+    } catch (err) {
+      return res
+        .status(500)
+        .json({ status: "error", message: "Error updating user" });
+    }
+  }
+
   static async findUserById(userId) {
     try {
       const user = await User.findByPk(userId, {
         include: [
           {
             model: Family,
-            as: 'family'
+            as: "family"
           }
         ]
       });
       if (user) return user;
-       return null
+      return null;
     } catch (error) {
-      return null
+      return null;
     }
   }
 }
