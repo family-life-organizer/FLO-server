@@ -4,7 +4,7 @@ import debug from "debug";
 import morgan from "morgan";
 import router from "./router";
 import dotenv from "dotenv";
-import cors from 'cors'
+import cors from "cors";
 
 dotenv.config();
 const app = express();
@@ -15,6 +15,10 @@ app.use(cors());
 app.use(morgan('tiny'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use( cors( {
+  origin     : true,
+  credentials: true
+} ) );
 app.use("/api", router);
 
 app.listen(port, () => {
