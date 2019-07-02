@@ -122,10 +122,9 @@ class Users {
         .status(200)
         .json({ status: "success", token, message: "Login Successfull" });
     } catch (err) {
-      console.log(err);
       return res
         .status(500)
-        .json({ status: "error", message: "Error creating user", err: err });
+        .json({ status: "error", message: "Error creating user" });
     }
   }
 
@@ -181,10 +180,10 @@ class Users {
   static async updateProfile(req, res) {
     let { userId, username, password, lastName, firstName, email } = req.body;
     if (!username && !password && !lastName && !firstName && !email) {
-        return res.status(400).json({
-            status: "error",
-            message: "At least one field must be provided for update to happen"
-          });
+      return res.status(400).json({
+        status: "error",
+        message: "At least one field must be provided for update to happen"
+      });
     }
     try {
       const existingUser = await User.findOne({ where: { id: userId } });
@@ -258,7 +257,6 @@ class Users {
         .status(400)
         .json({ status: "error", message: "Error updating user" });
     } catch (err) {
-
       return res
         .status(500)
         .json({ status: "error", message: "Error updating user" });
