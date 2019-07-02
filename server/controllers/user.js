@@ -92,14 +92,11 @@ class Users {
     const { username, email, password } = req.body;
 
     try {
-      const existingUser = await User.findOne(
-        //   { where: { username },
-        {
-          where: {
-            [Op.or]: [{ username }, { email }]
-          }
+      const existingUser = await User.findOne({
+        where: {
+          [Op.or]: [{ username }, { email }]
         }
-      );
+      });
 
       if (!existingUser) {
         return res.status(404).json({
@@ -129,6 +126,54 @@ class Users {
       return res
         .status(500)
         .json({ status: "error", message: "Error creating user", err: err });
+    }
+  }
+
+  static async addUser(req, res) {
+    const { errors, isValid } = UserValidations.validateAddUserInput(req.body);
+
+    // // Check validation
+    if (!isValid) {
+      return res.status(400).json({ status: "error", data: errors });
+    }
+
+    const { username, password } = req.body;
+    try {
+      const existingUsername = await User.findOne({ where: { username } });
+
+      if (existingUsername) {
+        return res.status(409).json({
+          status: "error",
+          message: "Username already existing, Kindly choose another username"
+        });
+      }
+
+      const hashedPassword = await generateHash(password);
+
+      const newUser = await family.createUser({
+        username,
+        password: hashedPassword
+      });
+
+      if (newUser) {
+        const response = {
+          id: newUser.id,
+          username: newUser.username,
+          isAdmin: newUser.isAdmin,
+          createdAt: newUser.createdAt,
+          updatedAt: newUser.updatedAt
+        };
+
+        return res.status(201).json({
+          status: "success",
+          message: "User Created Sucessfully",
+          data: response
+        });
+      }
+    } catch (err) {
+      return res
+        .status(500)
+        .json({ status: "error", message: "Error creating user" });
     }
   }
 }
