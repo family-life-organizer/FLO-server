@@ -55,6 +55,28 @@ Payload: {
 </code>
 </pre>
 
+
+<pre>
+<h3>Update Profile Route </h3>
+<code>
+Access: Private
+Method: PATCH
+Route: /api/profile
+headers: {
+    Authorization: token
+}
+Payload: {
+    username: STRING (optional),
+    password: STRING (optional),
+    email: STRING (optional)
+    firstName: STRING (optional)
+    lastName: STRING (optional)
+}
+
+Hint: At least one field to be updated must be provided
+</code>
+</pre>
+
 <pre>
 <h3>Create Category </h3>
 <code>
