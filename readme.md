@@ -141,6 +141,17 @@ headers : {
 </code>
 </pre>
 
+<pre>
+<h3>Mark task as completed</h3>
+<code>
+Method: PATCH
+Route: /api/tasks/`taskId`
+headers : {
+  authorization: token
+}
+</code>
+</pre>
+
 
 - Start coding
 - Keep coding
