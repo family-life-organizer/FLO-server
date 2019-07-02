@@ -287,6 +287,36 @@ class Users {
       return null;
     }
   }
+
+  static async getFamilyMembers(req, res) {
+    try {
+      const { userId } = req.body
+      const user = await User.findByPk(userId);
+      const familyMembers = await User.findAll({
+        where: {
+          familyId: user.familyId
+        },
+        attributes: ['id', 'firstName', 'lastName', 'isAdmin']
+      });
+      if(familyMembers) {
+        return res.status(200).json({
+          status: 'success',
+          message: 'success',
+          data: familyMembers
+        })
+        return res.status(404).json({
+          status: 'error',
+          message: 'No member found for the family',
+        })
+      }
+    } catch (error) {
+      return res.status(500).json({
+        status: 'error',
+        message: 'Internal server error',
+      })
+    }
+    
+  }
 }
 
 export default Users;
