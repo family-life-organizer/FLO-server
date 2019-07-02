@@ -3,7 +3,7 @@ import Users from "../controllers/user";
 import middleware from '../middlewares/authentication'
 import Category from '../controllers/category'
 
-const { isAuthenticated } = middleware;
+const { isAuthenticated, isAdmin } = middleware;
 const { createCategory }  = Category
 const { registerUser, loginUser, addUser } = Users;
 const router = express.Router();
@@ -20,5 +20,5 @@ router.post("/login", loginUser);
 
 router.post("/addUser", isAuthenticated, addUser);
 
-router.post('/categories', isAuthenticated, createCategory )
+router.post('/categories', isAdmin, createCategory )
 export default router;
