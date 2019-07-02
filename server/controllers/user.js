@@ -130,12 +130,12 @@ class Users {
   }
 
   static async addUser(req, res) {
-    const { errors, isValid } = UserValidations.validateAddUserInput(req.body);
+    // const { errors, isValid } = UserValidations.validateAddUserInput(req.body);
 
-    // // Check validation
-    if (!isValid) {
-      return res.status(400).json({ status: "error", data: errors });
-    }
+    // // // Check validation
+    // if (!isValid) {
+    //   return res.status(400).json({ status: "error", data: errors });
+    // }
 
     const { username, password } = req.body;
     try {
