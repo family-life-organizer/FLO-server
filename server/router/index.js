@@ -18,7 +18,7 @@ router.post("/signup", registerUser);
 
 router.post("/login", loginUser);
 
-router.post("/addUser", isAuthenticated, addUser);
+router.post("/addUser", isAdmin, addUser);
 
 router.post('/categories', isAdmin, createCategory )
 export default router;

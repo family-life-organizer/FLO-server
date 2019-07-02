@@ -1,8 +1,8 @@
 import model from "../models";
 import UserController from "../controllers/user";
-import familyController from '../controllers/family'
+import familyController from "../controllers/family";
 
-const { getFamily } = familyController
+const { getFamily } = familyController;
 const { findUserById } = UserController;
 const { Category, User, Family } = model;
 
@@ -16,22 +16,37 @@ class CategoryController {
     }
     try {
       const user = await findUserById(userId);
-      const cat = await user.family.createCategory({ name });
-      if (cat) {
+      const category = await Category.findOne({
+        where: {
+          id: user.family.id,
+          name: req.body.name
+        }
+      });
+
+      if (!category) {
+        const cat = await user.family.createCategory({ name });
+        if (cat) {
+          return res
+            .status(201)
+            .json({
+              status: "success",
+              message: "category create successfully"
+            });
+        }
         return res
-          .status(201)
-          .json({ status: "success", message: "category create successfully" });
+          .status(500)
+          .json({ status: "error", message: "Internal server error" });
+      } else {
+        return res
+          .status(409)
+          .json({ status: "error", message: "Category already exists" });
       }
-      return res
-        .status(500)
-        .json({ status: "error", message: "Internal server error" });
     } catch (error) {
       return res
         .status(500)
         .json({ status: "error", message: "Internal server error", error });
     }
   }
-
 }
 
 export default CategoryController;
