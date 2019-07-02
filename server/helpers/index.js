@@ -11,8 +11,7 @@ class Helper {
 
   static generateToken(payload, SECRET_OR_KEY) {
     const token = jwt.sign(payload, SECRET_OR_KEY, { expiresIn: 3600 });
-
-    return `Bearer ${token}`;
+    return token;
   }
 }
 

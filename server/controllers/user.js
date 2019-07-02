@@ -1,21 +1,21 @@
 import bcrypt from "bcrypt";
-
+import { Op } from "sequelize";
 import Helpers from "../helpers";
-
 import models from "../models";
+import UserValidations from "../validations/user";
 
 const { User, Family } = models;
 const { generateHash, generateToken } = Helpers;
 class Users {
   static async registerUser(req, res) {
-    const {
-      lastName,
-      firstName,
-      email,
-      username,
-      isAdmin,
-      password
-    } = req.body;
+    const { errors, isValid } = UserValidations.validateSignupInput(req.body);
+
+    // Check validation
+    if (!isValid) {
+      return res.status(400).json({ status: "error", data: errors });
+    }
+
+    const { lastName, firstName, email, username, password } = req.body;
     try {
       const existingFamily = await User.findOne({ where: { lastName } });
 
@@ -82,10 +82,24 @@ class Users {
   }
 
   static async loginUser(req, res) {
-    const { username, password } = req.body;
+    const { errors, isValid } = UserValidations.validateLoginInput(req.body);
+
+    // Check validation
+    if (!isValid) {
+      return res.status(400).json({ status: "error", data: errors });
+    }
+
+    const { username, email, password } = req.body;
 
     try {
-      const existingUser = await User.findOne({ where: { username } });
+      const existingUser = await User.findOne(
+        //   { where: { username },
+        {
+          where: {
+            [Op.or]: [{ username }, { email }]
+          }
+        }
+      );
 
       if (!existingUser) {
         return res.status(404).json({
@@ -109,11 +123,12 @@ class Users {
 
       return res
         .status(200)
-        .json({ status: "success", token, message: "Login Successful" });
+        .json({ status: "success", token, message: "Login Successfull" });
     } catch (err) {
+      console.log(err);
       return res
         .status(500)
-        .json({ status: "error", message: "Error creating user" });
+        .json({ status: "error", message: "Error creating user", err: err });
     }
   }
 }
