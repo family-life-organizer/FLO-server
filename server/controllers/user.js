@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-
+import { Op } from "sequelize";
 import Helpers from "../helpers";
 import models from "../models";
 import UserValidations from "../validations/user";
@@ -75,10 +75,9 @@ class Users {
         }
       }
     } catch (err) {
-        console.log(err)
       return res
         .status(500)
-        .json({ status: "error", message: "Error creating user", error: err });
+        .json({ status: "error", message: "Error creating user" });
     }
   }
 
@@ -90,10 +89,17 @@ class Users {
       return res.status(400).json({ status: "error", data: errors });
     }
 
-    const { username, password } = req.body;
+    const { username, email, password } = req.body;
 
     try {
-      const existingUser = await User.findOne({ where: { username } });
+      const existingUser = await User.findOne(
+        //   { where: { username },
+        {
+          where: {
+            [Op.or]: [{ username }, { email }]
+          }
+        }
+      );
 
       if (!existingUser) {
         return res.status(404).json({
@@ -119,9 +125,10 @@ class Users {
         .status(200)
         .json({ status: "success", token, message: "Login Successfull" });
     } catch (err) {
+      console.log(err);
       return res
         .status(500)
-        .json({ status: "error", message: "Error creating user", error: err });
+        .json({ status: "error", message: "Error creating user", err: err });
     }
   }
 }
