@@ -1,8 +1,12 @@
 {
   "name": "family-organizer-be",
   "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
+  "description": "family-life-organizer",
+  "engines": {
+    "node": ">=10.0.0 <11.0.0",
+    "npm": ">=6.0.0 <7.0.0 "
+  },
+  "main": "./server/app.js",
   "scripts": {
     "migrate": "sequelize db:migrate",
     "migrate:reset": "sequelize db:migrate:undo:all && npm run migrate",

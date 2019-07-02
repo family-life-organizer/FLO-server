@@ -3,7 +3,9 @@ import { Op } from "sequelize";
 import Helpers from "../helpers";
 import models from "../models";
 import UserValidations from "../validations/user";
+import FamilyController from "./family";
 
+const { getFamily } = FamilyController;
 const { User, Family } = models;
 const { generateHash, generateToken } = Helpers;
 class Users {
@@ -97,7 +99,7 @@ class Users {
           [Op.or]: [{ username }, { email }]
         }
       });
-
+      console.log(existingUser);
       if (!existingUser) {
         return res.status(404).json({
           status: "error",
@@ -115,13 +117,20 @@ class Users {
           message: "Wrong Password"
         });
       }
-      const { id } = existingUser;
+      const { id, familyId } = existingUser;
+      
+      const family = await getFamily({ id: familyId });
       const token = await generateToken({ id }, process.env.SECRET_OR_KEY);
 
-      return res
-        .status(200)
-        .json({ status: "success", token, message: "Login Successfull" });
+      return res.status(200).json({
+        status: "success",
+        user: existingUser,
+        family,
+        token,
+        message: "Login Successfull"
+      });
     } catch (err) {
+      console.log(err)
       return res
         .status(500)
         .json({ status: "error", message: "Error creating user" });
