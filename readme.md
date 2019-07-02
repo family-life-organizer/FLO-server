@@ -91,6 +91,23 @@ Payload: {
 </code>
 </pre>
 
+<pre>
+<h3>Create Task </h3>
+<code>
+Method: POST
+Route: /api/tasks
+headers : {
+  authorization: token
+}
+Payload: {
+    description: TEXT,
+    dueDate: DATETIME (2019-07-02 04:01:46 +0000)
+    categoryId: INTEGER,
+    assigneeId: INTEGER [optional]
+}
+</code>
+</pre>
+
 
 - Start coding
 - Keep coding

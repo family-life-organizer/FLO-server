@@ -1,18 +1,19 @@
 import models from "../models";
-
+import UserController from '../controllers/user'
 const { Task } = models;
 
 export default class TaskController {
   static async addTask(req, res) {
     try {
       const { assigneeId } = req.body || { assigneeId: null };
-      const { description, dueDate, categoryId, familyId } = req.body;
-      if (description && dueDate && categoryId && familyId) {
+      const { description, dueDate, categoryId, userId } = req.body;
+      if (description && dueDate && categoryId) {
+        const user = await UserController.findUserById(userId)
         const task = await Task.create({
           description,
           dueDate,
           categoryId,
-          familyId,
+          familyId: user.family.id,
           assigneeId
         });
         if (task) {
