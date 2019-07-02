@@ -109,7 +109,8 @@ class Users {
       const isPasswordMatch = bcrypt.compareSync(
         password,
         existingUser.password
-      );
+      ); 
+      
       if (!isPasswordMatch) {
         return res.status(401).json({
           status: "error",
