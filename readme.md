@@ -108,6 +108,7 @@ Payload: {
 </code>
 </pre>
 
+
 <pre>
 <h3>Get Family Task Categories </h3>
 <code>
@@ -152,6 +153,22 @@ headers : {
 </code>
 </pre>
 
+<pre>
+<h3>Update Task </h3>
+<code>
+Method: PATCH
+Route: /api/tasks/:id
+headers : {
+  authorization: token
+}
+Payload: {
+    description: TEXT [Optional],
+    dueDate: DATETIME (2019-07-02 04:01:46 +0000) [Optional]
+    categoryId: INTEGER [Optional],
+    assigneeId: INTEGER [optional]
+}
+</code>
+</pre>
 
 - Start coding
 - Keep coding
