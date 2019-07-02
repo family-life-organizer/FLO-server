@@ -101,19 +101,12 @@ export default class TaskController {
           .json({ status: "error", message: "Task Not Found" });
       }
       if (task.assigneeId === userId || user.isAdmin) {
-        console.log(task);
-        const updated = await task.update({ status: "completed" });
-        // console.log(updated)
-        return res
-          .status(200)
-          .json({ status: "success", message: "Task updated" });
+        const updated = await task.update({ status: 'completed'});
+        return res.status(200).json({status: 'success', message: 'Task updated'});
       }
       return res.status(403).json({ status: "error", message: "No permitted" });
     } catch (error) {
-      console.log(error);
-      return res
-        .status(500)
-        .json({ status: "error", message: "Internal server error", error });
+      return res.status(500).json({ status: 'error', message: 'Internal server error', error});
     }
   }
 }
