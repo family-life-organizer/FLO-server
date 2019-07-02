@@ -11,6 +11,7 @@ const app = express();
 const debugg = debug("app");
 const port = process.env.PORT || 6000;
 
+app.use(cors());
 app.use(morgan('tiny'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
