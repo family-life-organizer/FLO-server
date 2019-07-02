@@ -13,6 +13,7 @@
 <pre>
 <h3>Register Route </h3>
 <code>
+Access: Public
 Method: POST
 Route: /api/signup
 Payload: {
@@ -28,11 +29,42 @@ Payload: {
 <pre>
 <h3>Login Route </h3>
 <code>
+Access: Public
 Method: POST
 Route: /api/login
 Payload: {
     email: STRING || username: STRING,
     password: STRING
+}
+</code>
+</pre>
+
+<pre>
+<h3>Add User (Member) Route </h3>
+<code>
+Access: Private
+Method: POST
+Route: /api/addUser
+headers: {
+    Authorization: token
+}
+Payload: {
+    username: STRING,
+    password: STRING
+}
+</code>
+</pre>
+
+<pre>
+<h3>Create Category </h3>
+<code>
+Method: POST
+Route: /api/categories
+headers : {
+  authorization: token
+}
+Payload: {
+    name: STRING 
 }
 </code>
 </pre>

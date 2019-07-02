@@ -148,8 +148,6 @@ class Users {
         });
       }
 
-      console.log()
-
       const hashedPassword = await generateHash(password);
 
       const newUser = await User.create({
