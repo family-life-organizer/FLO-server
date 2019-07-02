@@ -120,7 +120,7 @@ class Users {
     } catch (err) {
       return res
         .status(500)
-        .json({ status: "error", message: "Error creating user" });
+        .json({ status: "error", message: "Error creating user", error: err });
     }
   }
 }
