@@ -179,14 +179,7 @@ class Users {
   }
 
   static async updateProfile(req, res) {
-    // const { errors, isValid } = UserValidations.validateAddUserInput(req.body);
-
-    // // // Check validation
-    // if (!isValid) {
-    //   return res.status(400).json({ status: "error", data: errors });
-    // }
-
-    const { userId, username, password, lastName, firstName, email } = req.body;
+    let { userId, username, password, lastName, firstName, email } = req.body;
     try {
       const existingUser = await User.findOne({ where: { id: userId } });
 
@@ -196,6 +189,12 @@ class Users {
           message: "User not found"
         });
       }
+
+      username = username || existingUser.username;
+      password = password || existingUser.password;
+      email = email || existingUser.email;
+      firstName = firstName || existingUser.firstName;
+      lastName = lastName || existingUser.lastName;
 
       const existingUsername = await User.findOne({
         where: {
@@ -253,6 +252,8 @@ class Users {
         .status(400)
         .json({ status: "error", message: "Error updating user" });
     } catch (err) {
+      console.log(err);
+
       return res
         .status(500)
         .json({ status: "error", message: "Error updating user" });
