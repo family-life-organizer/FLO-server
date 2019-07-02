@@ -64,7 +64,7 @@ class Users {
           };
 
           const { id } = newUser;
-          const token = await generateToken({ id }, process.env.SECRET_OR_KEY);
+          const token = await generateToken({ id });
 
           return res.status(201).json({
             status: "success",
@@ -93,7 +93,6 @@ class Users {
 
     try {
       const existingUser = await User.findOne(
-        //   { where: { username },
         {
           where: {
             [Op.or]: [{ username }, { email }]
@@ -119,7 +118,7 @@ class Users {
         });
       }
       const { id } = existingUser;
-      const token = await generateToken({ id }, process.env.SECRET_OR_KEY);
+      const token = await generateToken({ id });
 
       return res
         .status(200)
