@@ -6,7 +6,8 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.TEXT,
     dueDate: {
       type: DataTypes.DATE,
-    }
+    },
+    status: DataTypes.STRING,
   }, {});
   Task.associate = function(models) {
     Task.belongsTo(models.Category, {

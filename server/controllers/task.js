@@ -1,6 +1,6 @@
 import models from "../models";
-import UserController from '../controllers/user'
-const { Task } = models;
+import UserController from "../controllers/user";
+const { Task, User } = models;
 
 export default class TaskController {
   static async addTask(req, res) {
@@ -8,7 +8,7 @@ export default class TaskController {
       const { assigneeId } = req.body || { assigneeId: null };
       const { description, dueDate, categoryId, userId } = req.body;
       if (description && dueDate && categoryId) {
-        const user = await UserController.findUserById(userId)
+        const user = await UserController.findUserById(userId);
         const task = await Task.create({
           description,
           dueDate,
@@ -32,7 +32,6 @@ export default class TaskController {
         message: "All fields are required"
       });
     } catch (error) {
-      console.log("erorrrooro", error);
       return res.status(500).json({
         status: "error",
         message: "Internal server error",
@@ -42,89 +41,79 @@ export default class TaskController {
   }
 
   static async updateTask(req, res) {
-    let { userId, description, password, lastName, firstName, email } = req.body;
-    if (!username && !password && !lastName && !firstName && !email) {
+    let { description, dueDate, categoryId } = req.body;
+    const { id } = req.params;
+
+    if (!description && !dueDate && !categoryId) {
       return res.status(400).json({
         status: "error",
         message: "At least one field must be provided for update to happen"
       });
     }
     try {
-      const existingUser = await User.findOne({ where: { id: userId } });
+      const existingTask = await Task.findByPk(id);
 
-      if (!existingUser) {
-        return res.status(404).json({
-          status: "error",
-          message: "User not found"
-        });
+      if (!existingTask) {
+        return res
+          .status(400)
+          .json({ status: "error", message: "Task not found" });
       }
 
-      username = username || existingUser.username;
-      password = password || existingUser.password;
-      email = email || existingUser.email;
-      firstName = firstName || existingUser.firstName;
-      lastName = lastName || existingUser.lastName;
+      description = description || existingTask.description;
+      dueDate = dueDate || existingTask.dueDate;
+      categoryId = categoryId || existingTask.categoryId;
 
-      const existingUsername = await User.findOne({
-        where: {
-          username,
-          id: {
-            [Op.not]: existingUser.id
-          }
-        }
-      });
-
-      if (existingUsername) {
-        return res.status(409).json({
-          status: "error",
-          message: "Username already existing, Kindly choose another username"
-        });
-      }
-
-      const existingEmail = await User.findOne({
-        where: {
-          email,
-          id: {
-            [Op.not]: existingUser.id
-          }
-        }
-      });
-
-      if (existingEmail) {
-        return res.status(409).json({
-          status: "error",
-          message: "Email already existing, Kindly choose another username"
-        });
-      }
-
-      const hashedPassword = await generateHash(password);
-
-      const updatedUser = await User.update(
+      const updatedTask = await Task.update(
         {
-          username,
-          password: hashedPassword,
-          lastName,
-          firstName,
-          email
+          description,
+          dueDate,
+          categoryId
         },
-        { where: { id: userId } }
+        { where: { id } }
       );
 
-      if (updatedUser) {
+      if (updatedTask) {
         return res.status(200).json({
           status: "success",
-          message: "User Updated Sucessfully"
+          message: "Task Updated Sucessfully"
         });
       }
 
       return res
         .status(400)
-        .json({ status: "error", message: "Error updating user" });
+        .json({ status: "error", message: "Error updating task" });
     } catch (err) {
       return res
         .status(500)
-        .json({ status: "error", message: "Error updating user" });
+        .json({ status: "error", message: "Error updating task" });
     }
- 
+  }
+
+  static async completeTask(req, res) {
+    try {
+      const { userId } = req.body;
+      const user = await User.findByPk(userId);
+      const { taskId } = req.params;
+      const task = await Task.findByPk(taskId);
+      if (!task) {
+        return res
+          .status(400)
+          .json({ status: "error", message: "Task Not Found" });
+      }
+      if (task.assigneeId === userId || user.isAdmin) {
+        console.log(task);
+        const updated = await task.update({ status: "completed" });
+        // console.log(updated)
+        return res
+          .status(200)
+          .json({ status: "success", message: "Task updated" });
+      }
+      return res.status(403).json({ status: "error", message: "No permitted" });
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(500)
+        .json({ status: "error", message: "Internal server error", error });
+    }
   }
 }
