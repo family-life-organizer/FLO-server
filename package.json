@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "migrate": "sequelize db:migrate",
-    "migrate:reset": "sequelize db:migrate:undo && npm run migrate",
+    "migrate:reset": "sequelize db:migrate:undo:all && npm run migrate",
     "start:dev": "DEBUG=* nodemon --exec babel-node ./server/app.js",
     "start": "babel-node ./server/app.js"
   },
@@ -32,6 +32,7 @@
     "pg-hstore": "^2.3.3",
     "sequelize": "^5.9.0",
     "sequelize-cli": "^5.5.0",
+    "validator": "^11.0.0",
     "debug": "^4.1.1",
     "morgan": "^1.9.1"
   },
