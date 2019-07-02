@@ -6,7 +6,7 @@ import UserValidations from "../validations/user";
 import FamilyController from "./family";
 
 const { getFamily } = FamilyController;
-const { User, Family } = models;
+const { User, Family, Task } = models;
 const { generateHash, generateToken } = Helpers;
 class Users {
   static async registerUser(req, res) {
@@ -99,7 +99,6 @@ class Users {
           [Op.or]: [{ username }, { email }]
         }
       });
-      console.log(existingUser);
       if (!existingUser) {
         return res.status(404).json({
           status: "error",
@@ -118,13 +117,14 @@ class Users {
         });
       }
       const { id, familyId } = existingUser;
-      
+      const { firstName, lastName, isAdmin } = existingUser
+
       const family = await getFamily({ id: familyId });
       const token = await generateToken({ id }, process.env.SECRET_OR_KEY);
 
       return res.status(200).json({
         status: "success",
-        user: existingUser,
+        user: { firstName, lastName, isAdmin, username},
         family,
         token,
         message: "Login Successfull"
@@ -316,6 +316,41 @@ class Users {
       })
     }
     
+  }
+
+  static async getUserDetails(req, res) {
+    const { userId } = req.params;
+    try {
+      const user = await User.findByPk(userId, {
+        attributes: ['id', 'firstName', 'lastName', 'email', 'username', 'isAdmin'],
+        include:[
+          {
+            model: Family,
+            as: 'family'
+          },
+          {
+            model: Task,
+            as: 'tasks'
+          },
+        ]
+      });
+      if(user) {
+        return res.status(200).json({
+          status: 'success',
+          message: 'success',
+          data: user
+        })
+      }
+      return res.status(404).json({
+        status: 'error',
+        message: 'User Not found',
+      })
+    } catch (error) {
+      return res.status(500).json({
+        status: 'error',
+        message: 'Internal server error',
+      })
+    }
   }
 }
 

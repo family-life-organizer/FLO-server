@@ -6,7 +6,7 @@ import Task from '../controllers/task'
 const { addTask } = Task;
 const { isAuthenticated, isAdmin } = middleware;
 const { createCategory, getFamilyCategories }  = Category
-const { registerUser, loginUser, addUser, updateProfile, getFamilyMembers } = Users;
+const { registerUser, loginUser, addUser, updateProfile, getFamilyMembers, getUserDetails } = Users;
 const router = express.Router();
 
 router.get("/", (req, res) =>
@@ -26,6 +26,6 @@ router.patch("/profile", isAuthenticated, updateProfile);
 router.post('/categories', isAdmin, createCategory )
 router.get('/categories/family', isAdmin, getFamilyCategories )
 router.get('/users/family', isAdmin, getFamilyMembers )
-
+router.get('/users/:userId', isAuthenticated, getUserDetails)
 router.post('/tasks', isAdmin, addTask)
 export default router;
