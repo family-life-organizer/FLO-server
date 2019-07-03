@@ -298,7 +298,7 @@ class Users {
         where: {
           familyId: user.familyId
         },
-        attributes: ["id", "firstName", "lastName", "isAdmin"]
+        attributes: ['id', 'firstName', 'lastName', 'isAdmin', 'username', 'email']
       });
       if (familyMembers) {
         return res.status(200).json({
@@ -323,15 +323,8 @@ class Users {
     const { userId } = req.params;
     try {
       const user = await User.findByPk(userId, {
-        attributes: [
-          "id",
-          "firstName",
-          "lastName",
-          "email",
-          "username",
-          "isAdmin"
-        ],
-        include: [
+        attributes: ['id', 'firstName', 'lastName', 'email', 'username', 'isAdmin'],
+        includes:[
           {
             model: Family,
             as: "family"
