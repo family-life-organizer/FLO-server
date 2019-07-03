@@ -157,7 +157,7 @@ headers : {
 <h3>Update Task </h3>
 <code>
 Method: PATCH
-Route: /api/tasks/:id
+Route: /api/updateTasks/:id
 headers : {
   authorization: token
 }
