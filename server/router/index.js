@@ -36,7 +36,7 @@ router.get("/categories/family", isAdmin, getFamilyCategories);
 router.get("/users/family", isAdmin, getFamilyMembers);
 router.get("/users/:userId", isAuthenticated, getUserDetails);
 router.post("/tasks", isAdmin, addTask);
-router.patch("/tasks/:id", isAdmin, updateTask);
+router.patch("/updateTasks/:id", isAdmin, updateTask);
 router.patch("/tasks/:taskId", isAuthenticated, completeTask);
 
 export default router;
