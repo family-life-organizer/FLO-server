@@ -3,7 +3,7 @@ import Users from "../controllers/user";
 import middleware from "../middlewares/authentication";
 import Category from "../controllers/category";
 import Task from "../controllers/task";
-const { addTask, updateTask, completeTask,getFamilyTasks } = Task;
+const { addTask, updateTask, completeTask,getFamilyTasks, approveTask } = Task;
 
 const { isAuthenticated, isAdmin } = middleware;
 const { createCategory, getFamilyCategories } = Category;
@@ -39,5 +39,5 @@ router.post("/tasks", isAdmin, addTask);
 router.get("/tasks/family", isAdmin, getFamilyTasks);
 router.patch("/updateTasks/:id", isAdmin, updateTask);
 router.patch("/tasks/:taskId", isAuthenticated, completeTask);
-
+router.patch("/tasks/:taskId/approve", isAdmin, approveTask);
 export default router;
