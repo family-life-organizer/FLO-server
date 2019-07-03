@@ -126,8 +126,8 @@ export default class TaskController {
         },
         {
           include: [
-            { model: Category, as: 'category' },
-            { model: User, as: 'assignee'}
+            { model: Category, as: "category" },
+            { model: User, as: "assignee" }
           ]
         }
       );
@@ -143,6 +143,25 @@ export default class TaskController {
       });
     } catch (error) {
       console.log(error);
+      return res
+        .status(500)
+        .json({ status: "error", message: "Internal server error", error });
+    }
+  }
+  static async approveTask(req, res) {
+    try {
+      const { taskId } = req.params;
+      const { status } = req.body;
+      const task = await Task.findByPk(taskId);
+      const updated = task && await task.update({
+        status
+      });
+      if (updated) {
+        return res
+          .status(200)
+          .json({ status: "success", message: "Task updated", task });
+      }
+    } catch (error) {
       return res
         .status(500)
         .json({ status: "error", message: "Internal server error", error });
