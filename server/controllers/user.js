@@ -324,7 +324,7 @@ class Users {
     try {
       const user = await User.findByPk(userId, {
         attributes: ['id', 'firstName', 'lastName', 'email', 'username', 'isAdmin'],
-        includes:[
+        include: [
           {
             model: Family,
             as: 'family'
