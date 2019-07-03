@@ -41,10 +41,10 @@ export default class TaskController {
   }
 
   static async updateTask(req, res) {
-    let { description, dueDate, categoryId } = req.body;
+    let { description, dueDate, categoryId, assigneeId } = req.body;
     const { id } = req.params;
 
-    if (!description && !dueDate && !categoryId) {
+    if (!description && !dueDate && !categoryId && !assigneeId) {
       return res.status(400).json({
         status: "error",
         message: "At least one field must be provided for update to happen"
@@ -62,12 +62,14 @@ export default class TaskController {
       description = description || existingTask.description;
       dueDate = dueDate || existingTask.dueDate;
       categoryId = categoryId || existingTask.categoryId;
+      assigneeId = assigneeId || existingTask.assigneeId;
 
       const updatedTask = await Task.update(
         {
           description,
           dueDate,
-          categoryId
+          categoryId,
+          assigneeId
         },
         { where: { id } }
       );
