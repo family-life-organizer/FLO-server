@@ -170,6 +170,16 @@ Payload: {
 </code>
 </pre>
 
+<pre>
+<h3>Get Family Tasks</h3>
+<code>
+Method: GET
+Route: /api/tasks/family`
+headers : {
+  authorization: token
+}
+</code>
+</pre>
 - Start coding
 - Keep coding
 - Win the Hackerthon🔥🔥
