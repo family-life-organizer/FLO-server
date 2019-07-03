@@ -109,8 +109,8 @@ class Users {
       const isPasswordMatch = bcrypt.compareSync(
         password,
         existingUser.password
-      ); 
-      
+      );
+
       if (!isPasswordMatch) {
         return res.status(401).json({
           status: "error",
@@ -118,20 +118,20 @@ class Users {
         });
       }
       const { id, familyId } = existingUser;
-      const { firstName, lastName, isAdmin } = existingUser
+      const { firstName, lastName, isAdmin } = existingUser;
 
       const family = await getFamily({ id: familyId });
       const token = await generateToken({ id }, process.env.SECRET_OR_KEY);
 
       return res.status(200).json({
         status: "success",
-        user: { firstName, lastName, isAdmin, username},
+        user: { firstName, lastName, isAdmin, username },
         family,
         token,
         message: "Login Successfull"
       });
     } catch (err) {
-      console.log(err)
+      console.log(err);
       return res
         .status(500)
         .json({ status: "error", message: "Error creating user" });
@@ -156,12 +156,13 @@ class Users {
         });
       }
 
+      const getUser = await User.findOne({ where: { id: req.body.userId } });
       const hashedPassword = await generateHash(password);
 
       const newUser = await User.create({
         username,
         password: hashedPassword,
-        familyId: req.body.userId
+        familyId: getUser.familyId
       });
 
       if (newUser) {
@@ -291,66 +292,72 @@ class Users {
 
   static async getFamilyMembers(req, res) {
     try {
-      const { userId } = req.body
+      const { userId } = req.body;
       const user = await User.findByPk(userId);
       const familyMembers = await User.findAll({
         where: {
           familyId: user.familyId
         },
-        attributes: ['id', 'firstName', 'lastName', 'isAdmin']
+        attributes: ["id", "firstName", "lastName", "isAdmin"]
       });
-      if(familyMembers) {
+      if (familyMembers) {
         return res.status(200).json({
-          status: 'success',
-          message: 'success',
+          status: "success",
+          message: "success",
           data: familyMembers
-        })
+        });
         return res.status(404).json({
-          status: 'error',
-          message: 'No member found for the family',
-        })
+          status: "error",
+          message: "No member found for the family"
+        });
       }
     } catch (error) {
       return res.status(500).json({
-        status: 'error',
-        message: 'Internal server error',
-      })
+        status: "error",
+        message: "Internal server error"
+      });
     }
-    
   }
 
   static async getUserDetails(req, res) {
     const { userId } = req.params;
     try {
       const user = await User.findByPk(userId, {
-        attributes: ['id', 'firstName', 'lastName', 'email', 'username', 'isAdmin'],
-        include:[
+        attributes: [
+          "id",
+          "firstName",
+          "lastName",
+          "email",
+          "username",
+          "isAdmin"
+        ],
+        include: [
           {
             model: Family,
-            as: 'family'
+            as: "family"
           },
           {
             model: Task,
-            as: 'tasks'
-          },
+            as: "tasks"
+          }
         ]
       });
-      if(user) {
+      if (user) {
         return res.status(200).json({
-          status: 'success',
-          message: 'success',
+          status: "success",
+          message: "success",
           data: user
-        })
+        });
       }
       return res.status(404).json({
-        status: 'error',
-        message: 'User Not found',
-      })
+        status: "error",
+        message: "User Not found"
+      });
     } catch (error) {
       return res.status(500).json({
-        status: 'error',
-        message: 'Internal server error',
-      })
+        status: "error",
+        message: "Internal server error"
+      });
     }
   }
 }
